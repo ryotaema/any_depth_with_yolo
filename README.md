@@ -7,13 +7,11 @@ YOLOで検出したオブジェクト領域、または画像全体に対して 
 ```
 any_depth_yolo/
 ├── yolo_depth.py
-├── input/                  # 入力画像を置く
-├── output/                 # 推定結果が保存される
+├── input/                       # 入力画像を置く
+├── output/                      # 推定結果が保存される
 └── model/
-    ├── yolo_model/
-    │   └── 260410_pepper_yolo11.pt
-    └── depth_anything_model/
-        └── depth_anything_v2_vits.pth
+    ├── yolo_model/              # YOLOモデルを置く
+    └── depth_anything_model/    # Depth Anything V2 モデルを置く
 ```
 
 Depth-Anything-V2 リポジトリが同階層に必要です。
@@ -27,13 +25,25 @@ depth_anything/
 ## セットアップ
 
 ```bash
-# Depth Anything V2 リポジトリのクローン（未実施の場合）
-cd /home/ryota/harvesting_ws/depth_anything
+# Depth Anything V2 リポジトリのクローン
+cd /path/to/depth_anything
 git clone https://github.com/DepthAnything/Depth-Anything-V2
 
 # 依存関係のインストール
 pip install -r Depth-Anything-V2/requirements.txt
 pip install ultralytics
+```
+
+### モデルの配置
+
+**YOLOモデル**を `model/yolo_model/` に置く。
+
+**Depth Anything V2 モデル**を `model/depth_anything_model/` に置く。
+公式モデルは [Hugging Face](https://huggingface.co/depth-anything) からダウンロードできる。
+
+```bash
+wget -P model/depth_anything_model \
+  https://huggingface.co/depth-anything/Depth-Anything-V2-Small/resolve/main/depth_anything_v2_vits.pth
 ```
 
 ## 使い方
@@ -43,7 +53,7 @@ pip install ultralytics
 3. スクリプトを実行する
 
 ```bash
-cd /home/ryota/harvesting_ws/depth_anything/any_depth_yolo
+cd /path/to/any_depth_yolo
 python yolo_depth.py
 ```
 
@@ -65,16 +75,10 @@ MODE = 'yolo'  # ← ここを変更
 
 ## モデル
 
-| モデル | 用途 | 備考 |
-|--------|------|------|
-| `260410_pepper_yolo11.pt` | ピーマン検出（YOLO11） | カスタム学習済みモデル |
-| `depth_anything_v2_vits.pth` | 深度推定（ViT-Small） | Depth Anything V2 公式モデル |
+Depth Anything V2 のエンコーダは以下から選択できる。使用するモデルに合わせて `CHECKPOINT` と `model_configs` のキーを変更する。
 
-Depth Anything V2 の他のモデルを使う場合は、`CHECKPOINT` とモデル設定を変更する。
-
-| エンコーダ | パラメータ数 | `model_configs` キー |
-|-----------|-------------|----------------------|
-| ViT-Small | 24.8M       | `vits` |
-| ViT-Base  | 97.5M       | `vitb` |
-| ViT-Large | 335.3M      | `vitl` |
-# any_depth_with_yolo
+| エンコーダ | パラメータ数 | model_configs キー |
+|-----------|-------------|-------------------|
+| ViT-Small | 24.8M       | vits |
+| ViT-Base  | 97.5M       | vitb |
+| ViT-Large | 335.3M      | vitl |

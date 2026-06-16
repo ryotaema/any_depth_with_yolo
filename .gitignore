@@ -1,7 +1,8 @@
 input/*
 !input/.gitkeep
-model/**
+model/depth_anything_model/**
 !model/depth_anything_model/.gitkeep
+model/yolo_model/**
 !model/yolo_model/.gitkeep
 output/*
 !output/.gitkeep
